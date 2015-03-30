@@ -1,9 +1,4 @@
 package imcgit;
-
-
-    import javax.swing.JFrame;
-    
-    //Main - Nome da classe
     public class IMCGit
     {
        //Comando principal para execução do programa

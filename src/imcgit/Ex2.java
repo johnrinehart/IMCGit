@@ -2,6 +2,7 @@ package imcgit;
 
  //importação das classes necessárias
  //layouts para alinhamento dos componentes
+import java.awt.Component;
  import java.awt.FlowLayout;
  import java.awt.GridLayout;
  //janela
@@ -20,7 +21,6 @@ package imcgit;
  //painel
  import javax.swing.JPanel;
  //caixa de textos
- import javax.swing.JTextArea;
  //campo para inserção de valores ou caracteres
  import javax.swing.JTextField;
  //Evento para de ouvir um evento do botão
@@ -28,14 +28,13 @@ package imcgit;
  //Evento de executar uma ação do evento que foi ouvido(ativado)
  import java.awt.event.ActionEvent;
  //Tratador de erros
- import java.util.InputMismatchException;
  
  //Criação da classe EX2 extendendo a classe JFrame que foi importada
   public class Ex2 extends JFrame
   {
      //declaração das variáveis
      //Vetor de caracteres (String) de 2 colunas
-     private String sexo[]={"Mulher","Homem"};
+     private final String sexo[]={"Mulher","Homem"};
      //inteiros (int)
      int tipo, foto;
      //numeros de pontos flutuantes (double)
@@ -46,35 +45,35 @@ package imcgit;
     private String string="";
  
     //criação do FlowLayout que alinha componentes da esquerda para a direita.
-    private FlowLayout flowLayout = new FlowLayout();
+    private final FlowLayout flowLayout = new FlowLayout();
     /*criação de GridLayout com 4 linhas e 2 colunas com 10 de espaço em largura
   e 1 de altura*/
- private GridLayout gridLayout = new GridLayout(4,2,10,1);
+ private final GridLayout gridLayout = new GridLayout(4,2,10,1);
  //criação de um painel
- private JPanel gridJPanel = new JPanel();
+ private final JPanel gridJPanel = new JPanel();
 
  //criação de dois botões com os nomes Calcular e Limpar Dados
- private JButton butao = new JButton("Calcular");
- private JButton butao2 = new JButton("Limpar Dados");
+ private final JButton butao = new JButton("Calcular");
+ private final JButton butao2 = new JButton("Limpar Dados");
  //criação das label's
-   private JLabel Lsexo = new JLabel("Escolha o sexo:");
-   private JLabel Laltura = new JLabel("Altura em cm:");
-   private JLabel Lpeso = new JLabel("Peso em Kg:");
-   private JLabel Lresultado = new JLabel("");
-   private JLabel Lfoto = new JLabel("");
+   private final JLabel Lsexo = new JLabel("Escolha o sexo:");
+   private final JLabel Laltura = new JLabel("Altura em cm:");
+   private final JLabel Lpeso = new JLabel("Peso em Kg:");
+   private final JLabel Lresultado = new JLabel("");
+   private final JLabel Lfoto;
    //criação de campos com 5 de largura
-   private JTextField Faltura = new JTextField("",5);
-   private JTextField Fpeso = new JTextField("",5);
+   private final JTextField Faltura = new JTextField("",5);
+   private final JTextField Fpeso = new JTextField("",5);
 
    //criação de uma caixa de seleção
    private JComboBox escolha = new JComboBox(sexo);
 
    //anexando a imagem um icone de nome limpar
-   private Icon limpar = new ImageIcon(getClass().getResource("blank.gif"));
+   private final Icon limpar = new ImageIcon(getClass().getResource("blank.gif"));
  //criando um vetor com as demais imagens
- private Icon imagemM[] = {new ImageIcon(getClass().getResource("esqueleto.gif")), new ImageIcon
+ private final Icon imagemM[] = {new ImageIcon(getClass().getResource("esqueleto.gif")), new ImageIcon
  (getClass().getResource("normalM.jpg")),new ImageIcon(getClass().getResource("obesa.jpg"))};
-private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif")), new ImageIcon
+private final Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif")), new ImageIcon
  (getClass().getResource("normalH.jpg")),new ImageIcon(getClass().getResource("obeso.jpg"))};
  
     //construtor de Ex2 sem argumentos
@@ -82,6 +81,7 @@ private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif"))
     {
      //título  da janela
      super("Calculo do IMC(índice de massa corporal)");
+        this.Lfoto = new JLabel("");
      //alinhamento do frame com o uso do objeto flowLayout
      super.setLayout(flowLayout);
      //tamanho da janela
@@ -101,7 +101,7 @@ private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif"))
      gridJPanel.add(Lpeso);
      gridJPanel.add(Fpeso);
      gridJPanel.add(butao);
-     gridJPanel.add(butao2);
+         Component add = gridJPanel.add(butao2);
  
      //adiciona a janela principal
      super.add(gridJPanel);
@@ -109,43 +109,33 @@ private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif"))
      super.add(Lresultado);
  
      //criação de uma classe interna anônima para butao
-     butao.addActionListener(
-     new ActionListener()
-     {
-        public void actionPerformed(ActionEvent event)
-        {
+     butao.addActionListener((ActionEvent event) -> {
          switch (escolha.getSelectedIndex())
          {
-            /*caso seja a primeira opção que foi selecionada na caixa de seleção
-          configure tipo=0 e vá para o método Calculos*/
-         case 0:
-         {
-           tipo=0; //mulher
-           Calculos();
-           break;
+             /*caso seja a primeira opção que foi selecionada na caixa de seleção
+             configure tipo=0 e vá para o método Calculos*/
+             case 0:
+             {
+                 tipo=0; //mulher
+                 Calculos();
+                 break;
+             }
+             //caso seja a segunda opção, configura tipo como 1 e vá para o método Calculos.
+             case 1:
+             {
+                 tipo=1; //homem
+                 Calculos();
+                 break;
+             }
          }
-         //caso seja a segunda opção, configura tipo como 1 e vá para o método Calculos.
-         case 1:
-         {
-           tipo=1; //homem
-           Calculos();
-           break;
-         }
-      }
-     }
-   }//Fim da classe interna anônima
-  );//fim da chamada para addActionListerner
+     } //Fim da classe interna anônima
+     );//fim da chamada para addActionListerner
 
   //classe interna anônima para butao2
-  butao2.addActionListener(
-  new ActionListener()
-  {
-     //ao clicar no butao2 de nome limpar chama o método limpar
-        public void actionPerformed(ActionEvent event)
-        {
-         limpar();
-        }
-     }//Fim da classe interna anônima
+  butao2.addActionListener((ActionEvent event) -> {
+      limpar();
+     } //ao clicar no butao2 de nome limpar chama o método limpar
+     //Fim da classe interna anônima
      );//fim da chamada para addActionListerner
     }
  
@@ -168,17 +158,17 @@ private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif"))
         {
            if (imc_mulheres[0]>massa)
            {
-              string = String.format("CUIDADO!!!Voce estar abaixo do peso! IMC %.2f",massa);
+              string = String.format("CUIDADO!!!Voce esta abaixo do peso! IMC %.2f",massa);
              foto=0;
           }
           else if((imc_mulheres[0]<massa) && (massa<=imc_mulheres[1]))
              {
-                string = String.format("PARABENS!!Voce estar com o peso ideal! IMC %.2f",massa);
+                string = String.format("PARABENS!!Voce esta com o peso ideal! IMC %.2f",massa);
               foto=1;
            }
            else
            {
-              string = String.format("CUIDADO!!Voce estar obesa! IMC %.2f",massa);
+              string = String.format("CUIDADO!!Voce esta obesa! IMC %.2f",massa);
                 foto=2;
              }
              //configure a foto conforme a posição da variável foto
@@ -188,18 +178,18 @@ private Icon imagemH[] = {new ImageIcon(getClass().getResource("esqueleto.gif"))
         {
            if (imc_homens[0]>massa)
            {
-              string = String.format("CUIDADO!!!Voce estar abaixo do peso! IMC %.2f",massa);
+              string = String.format("CUIDADO!!!Voce esta abaixo do peso! IMC %.2f",massa);
                 //configura a posição que será exibido a imagem
                 foto=0;
              }
              else if((imc_homens[0]<massa) && (massa<imc_homens[1]))
              {
-                string = String.format("PARABENS!!Voce estar com o peso ideal! IMC %.2f",massa);
+                string = String.format("PARABENS!!Voce esta com o peso ideal! IMC %.2f",massa);
                 foto=1;
              }
              else
              {
-                string = String.format("CUIDADO!!Voce estar obeso! IMC %.2f",massa);
+                string = String.format("CUIDADO!!Voce esta obeso! IMC %.2f",massa);
               foto=2;
            }
            //configure a foto conforme a posição da variável foto
